@@ -1,17 +1,26 @@
 import javax.swing.*;
-import java.awt.Color;
 import javax.swing.border.Border;
-public class MainMenu{
-		public MainMenu(){
-				
-				//handler.clearFrame();
+import java.awt.Color;
+public class GameInstance{
+		private JFrame frame;
+		private static boolean unique = true;
+		private int state;
+		public GameInstance(JFrame framee){
+				if(unique){
+						//display intro on thread
 
-				FrameHandler handler = new FrameHandler();
+						//display MainMenu
+						frame = framee;
+						mainMenu();
+						
+				}
+			
+		}
 
-
+		private void mainMenu(){
 				JPanel panel = new JPanel();
 				panel.setLayout(null);
-				panel.setBounds(1,1,1000,700);
+				panel.setBounds(1,1,10,10);
 
 				ImageIcon imageIcon = new ImageIcon("Homescreen.png");
 				JLabel bg = new JLabel(imageIcon);
@@ -43,7 +52,18 @@ public class MainMenu{
 				panel.add(howToPlay);
 				panel.add(aboutUs);
 				panel.add(bg);
+				frame.add(panel);
 
-				handler.setFrame(panel);
+				frame.repaint();
+				frame.revalidate();
+
 		}
+		private void levelSelect(){
+
+		}
+
+		private void helpScreen(){
+
+		}
+
 }

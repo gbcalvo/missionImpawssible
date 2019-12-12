@@ -1,46 +1,30 @@
 import javax.swing.*;
-import java.awt.Color;
-public class FrameHandler{
-		public JFrame frame;
-		public JPanel panel;
+public class FrameHandler extends JFrame{
+		private static JFrame frame;
 		private static boolean unique = true;
 		public FrameHandler(){
 			initialize();
-			unique = false;
 		}
 		public JFrame getFrame(){
 				return frame;
 		}
 		public void clearFrame(){
-				frame.remove(panel);
+				frame.removeAll();
+				frame.repaint();
+				frame.revalidate();
 		}
 		private void initialize(){
 				if(unique){
-						frame = new JFrame();
-						frame.setLayout(null);
+						frame = new JFrame("imong utot");
 						frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
 						frame.setBounds(1,1,1000,700);
 						frame.setResizable(false);
 						frame.setVisible(true);
 
-
-						panel = new JPanel();
-						panel.setLayout(null);
-						panel.setBounds(1,1,1000,700);
-						frame.add(panel);
-						frame.repaint();
-						frame.revalidate();
-						unique = false;
+						GameInstance instance = new GameInstance(frame);
 				}
-		}
-		public void setFrame(JPanel panell){
-				if(panel != null){
-						clearFrame();
-				}
-				panel = panell;
-				frame.add(panell);
-				frame.repaint();
-				frame.revalidate();	
-							
 		}
 }
