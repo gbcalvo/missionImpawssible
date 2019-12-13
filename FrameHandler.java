@@ -1,7 +1,7 @@
 import javax.swing.*;
 import java.awt.Color;
 public class FrameHandler{
-		private static JFrame frame;
+		static JFrame frame;
 		private static JPanel panel;
 		private static boolean unique = true;
 		public FrameHandler(){
