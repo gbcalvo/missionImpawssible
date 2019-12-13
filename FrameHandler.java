@@ -1,15 +1,12 @@
 import javax.swing.*;
 import java.awt.Color;
 public class FrameHandler{
-		public JFrame frame;
-		public JPanel panel;
+		private static JFrame frame;
+		private static JPanel panel;
 		private static boolean unique = true;
 		public FrameHandler(){
 			initialize();
 			unique = false;
-		}
-		public JFrame getFrame(){
-				return frame;
 		}
 		public void clearFrame(){
 				frame.remove(panel);
@@ -41,6 +38,5 @@ public class FrameHandler{
 				frame.add(panell);
 				frame.repaint();
 				frame.revalidate();	
-							
 		}
 }
