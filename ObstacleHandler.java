@@ -1,14 +1,15 @@
 public class ObstacleHandler implements Runnable{
-		Tile[][] map;
-		public ObstacleHandler(Game game){
-				this.map = game.map;
+		private boolean iterate;
+		private Game game;
+		public ObstacleHandler(Game instance){
+				game = instance;
+				iterate = true;
 		}
 		public void run(){
-				while(true){
+				while(iterate){
 						moveObstacles();
-						System.out.println("waiting");
 						try{
-								Thread.sleep(500);
+								Thread.sleep(1000);
 						}catch(Exception e){
 							e.printStackTrace();
 						}
@@ -20,10 +21,10 @@ public class ObstacleHandler implements Runnable{
 				int val;
 				for(int y = 0; y < 18; y++){
 						for(int x = 0; x < 30; x++){
-								val = map[y][x].content;
+								val = game.map[y][x].content;
 								if(val == 3){
 										q.enqueue(x,y,5);
-										if(y == 0 || map[y-1][x].content != 5){
+										if(y == 0 || game.map[y-1][x].content != 5){
 												q.enqueue(x,y+1, 4);
 										}
 										else{
@@ -32,7 +33,7 @@ public class ObstacleHandler implements Runnable{
 								}
 								else if(val == 4){
 										q.enqueue(x,y,5);
-										if(y == 15 || map[y+1][x].content != 5){
+										if(y == 15 || game.map[y+1][x].content != 5){
 												q.enqueue(x, y-1, 3);
 										}
 										else{
@@ -42,21 +43,21 @@ public class ObstacleHandler implements Runnable{
 								}
 								else if(val == 6){
 										q.enqueue(x,y,8);
-										if(x == 29 || map[y][x+1].content != 8){
-												q.enqueue(x, y-1, 7);
+										if(x == 29 || game.map[y][x+1].content != 8){
+												q.enqueue(x-1, y, 7);
 										}
 										else{
-												q.enqueue(x, y+1, 6);
+												q.enqueue(x+1, y, 6);
 										}
 
 								}
 								else if(val == 7){
 										q.enqueue(x,y,8);
-										if(x == 0 || map[y][x-1].content != 8){
-												q.enqueue(x, y+1, 6);
+										if(x == 0 || game.map[y][x-1].content != 8){
+												q.enqueue(x+1, y, 6);
 										}
 										else{
-												q.enqueue(x, y-1, 7);
+												q.enqueue(x-1, y, 7);
 										}
 
 								}
@@ -69,10 +70,13 @@ public class ObstacleHandler implements Runnable{
 						update(curr);
 						curr = q.dequeue();
 				}
-				System.out.println("updated!");
+
 		}
 		private void update(Node x){
-				map[x.coordinateY][x.coordinateX].content = x.newValue;
+				game.map[x.coordinateY][x.coordinateX].content = x.newValue;
+		}
+		public void end(){
+				iterate = false;
 		}
 
 }

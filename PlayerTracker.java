@@ -14,81 +14,67 @@ public class PlayerTracker implements KeyListener{
 		public void keyPressed(KeyEvent e){
 				if(e.getKeyCode() == 87){
 						if(game.playerY > 0){
-								if(game.map[game.playerY+1+game.screenY][game.playerX+game.screenX].content != 2){
+								if(game.map[game.screenY+game.playerY-1][game.screenX+game.playerX].content == 2){
+									return;
+								}
+								if(game.screenY > 0 && game.playerY <= 2){
+										//scroll;
+										game.screenY--;
+								}
+								else{
 										game.playerY--;
-										if(checkCollision()){
-												return;
-										}
-										else{
-												if(game.playerY < 3 && game.screenY > 0){
-														//scroll up;
-														game.screenY--;
-														game.playerY++;
-												}
-										}
-										showPlayer(game.screen[game.playerY][game.playerX]);
-										System.out.println("up!" + game.playerX+game.playerY);
+										showPlayer();
+
 								}
 						}
 				}
 				else if(e.getKeyCode() == 65){
 						if(game.playerX > 0){
-								if(game.map[game.playerY+game.screenY][game.playerX-1+game.screenX].content != 2){
+								if(game.map[game.screenY+game.playerY][game.screenX+game.playerX-1].content == 2){
+									return;
+								}
+								if(game.screenX > 0 && game.playerX < 6){
+										//scroll;
+										game.screenX--;
+								}
+								else{
 										game.playerX--;
-										if(checkCollision()){
-												return;
-										}
-										else{
-												if(game.playerX > 5 && game.screenX > 0){
-														//scroll up;
-														game.screenX--;
-														game.playerX++;
-												}
-										}
-										showPlayer(game.screen[game.playerY][game.playerX]);
-										System.out.println("left!" + game.playerX+game.playerY);
+										showPlayer();
+
 								}
 						}
 				}
-				else if(e.getKeyCode() == 83){
+				else if(e.getKeyCode() == 83){	
 						if(game.playerY < 5){
-								if(game.map[game.playerY+game.screenY+1][game.playerX+game.screenX].content != 2){
+								if(game.map[game.screenY+game.playerY+1][game.screenX+game.playerX].content == 2){
+									return;
+								}
+								if(game.screenY < 12 && game.playerY > 2){
+										//scroll;
+										game.screenY++;
+								}
+								else{
 										game.playerY++;
-										if(checkCollision()){
-												return;
-										}
-										else{
-												if(game.playerY > 3 && game.screenY < 9){
-														//scroll up;
-														game.screenY++;
-														game.playerY--;
-												}
-										}
-										showPlayer(game.screen[game.playerY][game.playerX]);
-										System.out.println("down!" + game.playerX+game.playerY);
+										showPlayer();
+
 								}
 						}
 
 				}
-				else if(e.getKeyCode() == 68){
-						if(game.playerX > 0){
-								if(game.map[game.playerY+game.screenY][game.playerX+game.screenX+1].content != 2){
+				else if(e.getKeyCode() == 68){	
+						if(game.playerX < 9){
+								if(game.map[game.screenY+game.playerY][game.screenX+game.playerX+1].content == 2){
+									return;
+								}
+								if(game.screenX < 20 && game.playerX >4){
+										//scroll;
+										game.screenX++;
+								}
+								else{
 										game.playerX++;
-										if(checkCollision()){
-												return;
-										}
-										else{
-												if(game.playerX > 4 && game.screenX > 0){
-														//scroll up;
-														game.screenX++;
-														game.playerX--;
-												}
-										}
-										showPlayer(game.screen[game.playerY][game.playerX]);
-										System.out.println("right!" + game.playerX+game.playerY);
+										showPlayer();
 								}
 						}
-
 				}
 		}
 		public void keyReleased(KeyEvent e){
@@ -97,32 +83,8 @@ public class PlayerTracker implements KeyListener{
 		public void keyTyped(KeyEvent e){
 			
 		}
-		private boolean checkCollision(){
-					if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 3){
-						return true;
-					}
-					else if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 4){
-						return true;
-					}
-					else if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 6){
-						return true;
-					}
-					else if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 7){
-						return true;
-					}
-					else if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 9){
-						return true;
-					}
-					else if(game.map[game.playerY+game.screenY][game.playerX+game.screenX].content == 10){
-						GameEngine.end();
-						return false;
-					}
-					else{
-						return false;
-					}
-		}
-		private void showPlayer(JLabel label){
-				label.setIcon(playerIcon);
+		private void showPlayer(){
+				game.screen[game.playerY][game.playerX].setIcon(playerIcon);
 		}
 
 }
