@@ -2,22 +2,53 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.*;
 public class GameEngine{
 		static ObstacleHandler obstacleHandler;
 		static MapHandler mapHandler;
-		private ImageIcon playerIcon;
-		public GameEngine(){
-				playerIcon = new ImageIcon("assets/puggy25.png");
+		static GameOverThread gameOver;
+		private static String myPlayer;
+		private Game game;
+		private static int level;
+		private static PlayerTracker playerTracker;
+		private static  FrameHandler frameHandler;
+		public GameEngine(int levell, String player){
+				myPlayer = player;
+				level = levell;
 
 
-				FrameHandler frameHandler = new FrameHandler();
+				frameHandler = new FrameHandler();
 				frameHandler.clearFrame();
 
-				Game game = new Game();
+				game = new Game(level);
+
+				obstacleHandler = new ObstacleHandler(game);
+				mapHandler = new MapHandler(game);
+				gameOver = new GameOverThread(game);
+
+
+				Thread obstacles = new Thread(obstacleHandler);
+				Thread refresher = new Thread(mapHandler);
+				Thread gameOverChecker  = new Thread(gameOver);
+
+				obstacles.start();
+				refresher.start();
+				gameOverChecker.start();
+				
+				game.player.setIcon(new ImageIcon("assets/"+player+"4.png"));
+				game.player.repaint();
+				game.player.validate();
+
+
 
 				JPanel gamePanel = new JPanel();
 				gamePanel.setLayout(null);
 				gamePanel.setBounds(1,1,1000,700);
+
+				playerTracker = new PlayerTracker(game, myPlayer);
+
+				gamePanel.add(game.player);
+
 
 
 				Border raisedBorder = BorderFactory.createRaisedBevelBorder();
@@ -27,6 +58,7 @@ public class GameEngine{
 						public void actionPerformed(ActionEvent evt){
 								LevelSelector ls = new LevelSelector();
 								ls.show();
+								end();
 						}
 				});
 				mainMenu.setBounds(795,600,200,75);
@@ -56,8 +88,6 @@ public class GameEngine{
 						posX = 0;
 						posY +=100;
 				}
-				game.screen[3][0].setIcon(playerIcon);
-				game.screen[3][0].repaint();
 
 
 
@@ -70,18 +100,13 @@ public class GameEngine{
 
 
 				//start threads
-				PlayerTracker playerTracker = new PlayerTracker(game, playerIcon);
+				
 				frameHandler.frame.addKeyListener(playerTracker);
 				
-				obstacleHandler = new ObstacleHandler(game);
-				mapHandler = new MapHandler(game);
+				
 
 				//FrameHandler frameHandler = new FrameHandler();
-				Thread obstacles = new Thread(obstacleHandler);
-				Thread refresher = new Thread(mapHandler);
 
-				obstacles.start();
-				refresher.start();
 
 
 				//mapHandler- will handle refreshing screen on a thread
@@ -91,6 +116,12 @@ public class GameEngine{
 		public static void end(){
 				obstacleHandler.end();
 				mapHandler.end();
-				System.out.println("finish na");
+				gameOver.end();
+				frameHandler.frame.removeKeyListener(playerTracker);
+				new GameEngine(level, myPlayer);
+		}
+		public void restart(){
+				game = new Game(level);
+				System.out.println("utrooooo");
 		}
 }
